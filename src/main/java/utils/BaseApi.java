@@ -1,8 +1,6 @@
 package utils;
 
 import com.google.gson.Gson;
-import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
 
 public interface BaseApi {
     String BASE_URL = "https://contactapp-telran-backend.herokuapp.com";
@@ -15,9 +13,6 @@ public interface BaseApi {
 
     Gson GSON = new Gson();
 
-    MediaType JSON = MediaType.get("application/json");
-    OkHttpClient OK_HTTP_CLIENT = new OkHttpClient();
-    MediaType TEXT = MediaType.get("text/plain");
     String AUTH = "Authorization";
 
 }
