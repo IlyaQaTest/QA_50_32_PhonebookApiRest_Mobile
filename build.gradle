@@ -8,25 +8,35 @@ version = '1.0-SNAPSHOT'
 repositories {
     mavenCentral()
 }
+configurations.all {
+    resolutionStrategy.force 'commons-codec:commons-codec:1.15'
+}
 
 dependencies {
-    implementation 'org.seleniumhq.selenium:selenium-java:4.8.1'
+    implementation 'org.seleniumhq.selenium:selenium-java:4.25.0'
     implementation 'org.testng:testng:7.11.0'
 
+    // Lombok
     compileOnly 'org.projectlombok:lombok:1.18.28'
     annotationProcessor 'org.projectlombok:lombok:1.18.28'
     testCompileOnly 'org.projectlombok:lombok:1.18.28'
     testAnnotationProcessor 'org.projectlombok:lombok:1.18.28'
 
-    implementation 'io.rest-assured:rest-assured:4.5.1'
-    implementation 'com.google.code.gson:gson:2.8.6'
+    // REST
+    implementation 'io.rest-assured:rest-assured:5.4.0'
+    implementation 'com.google.code.gson:gson:2.10.1'
 
-    //https://mvnrepository.com/artifact/io.rest-assured/json-schema-validator
-    implementation("io.rest-assured:json-schema-validator:3.0.0")
-
+    // Mobile & Utils
     implementation 'net.datafaker:datafaker:2.5.2'
+    implementation 'io.appium:java-client:9.2.2'
+
+    // Используем 1.15, так как она наиболее стабильна и доступна
+    implementation 'commons-codec:commons-codec:1.15'
+
+    testImplementation 'org.slf4j:slf4j-simple:2.0.7'
 }
 
 test {
     useTestNG()
+    jvmArgs = ['--add-opens', 'java.base/java.lang=ALL-UNNAMED']
 }

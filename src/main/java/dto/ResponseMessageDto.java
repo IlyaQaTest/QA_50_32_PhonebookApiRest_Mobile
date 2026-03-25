@@ -10,6 +10,6 @@ import lombok.*;
 @Builder
 
 public class ResponseMessageDto {
-    String message;
+   private String message;
 }
 
