@@ -121,4 +121,36 @@ public class RegistrationTests extends TestBase {
         Assert.assertTrue(new ErrorScreen(driver).validateTextInError
                 ("User already exists", 5));
     }
+    @Test
+    public void registrationNegative_ShortPasswordTest() {
+        User user = positiveUser();
+        user.setPassword("12345"); // Пароль короче 8 символов
+
+        logger.info("Starting registration test with short password: {}", user.getPassword());
+        loginRegistrationScreen.typeLoginRegistrationForm(user);
+        loginRegistrationScreen.clickBtnRegistration();
+        // 1. Сначала читаем текст алерта через ваш метод (он у вас уже есть в BaseScreen/TestBase)
+        String actualAlertText = getAlertTextAndClose();
+        // 2. Логируем реальный текст, который пришел от приложения
+        logger.info("REAL ALERT TEXT RECEIVED: [{}]", actualAlertText);
+        // 3. Проверяем на вхождение (сделаем проверку мягче, по ключевому слову)
+        Assert.assertTrue(actualAlertText.toLowerCase().contains("password"),
+                "Alert text did not contain 'password'. Actual text: " + actualAlertText);
+    }
+
+    @Test
+    public void registrationNegative_PasswordWithoutDigitsTest() {
+        User user = positiveUser();
+        user.setPassword("Password!"); // Нет цифр
+
+        logger.debug("Testing registration with password without digits: {}", user.getPassword());
+        loginRegistrationScreen.typeLoginRegistrationForm(user);
+        loginRegistrationScreen.clickBtnRegistration();
+        String actualAlertText = getAlertTextAndClose();
+        logger.info("REAL ALERT TEXT RECEIVED: [{}]", actualAlertText);
+        Assert.assertTrue(actualAlertText.toLowerCase().contains("password"),
+                "Alert text did not contain 'password'. Actual text: " + actualAlertText);
+
+
+    }
 }
