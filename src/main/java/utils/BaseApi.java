@@ -14,5 +14,4 @@ public interface BaseApi {
     Gson GSON = new Gson();
 
     String AUTH = "Authorization";
-
 }

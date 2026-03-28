@@ -7,12 +7,11 @@ import org.openqa.selenium.WebElement;
 public class SplashScreen extends BaseScreen{
     public SplashScreen(AppiumDriver driver) {
         super(driver);
-
     }
+
     @AndroidFindBy(xpath = "//*[contains(@text, '1.0.0')]")
     WebElement versionApp;
 
-    //method
     public boolean validateVersionApp(String text,int time){
        return isTextInElementPresent(versionApp,text,time);
     }

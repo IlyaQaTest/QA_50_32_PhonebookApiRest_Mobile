@@ -12,6 +12,5 @@ public class SplashScreenTests extends TestBase {
         SplashScreen splashScreen = new SplashScreen(driver);
         Assert.assertTrue(splashScreen
                 .validateVersionApp("Version 1.0.0", 5));
-
     }
 }
