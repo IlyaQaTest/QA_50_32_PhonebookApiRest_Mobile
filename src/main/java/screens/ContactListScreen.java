@@ -5,8 +5,13 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import utils.Direction;
+import utils.SwipeUtils;
+
 import java.time.Duration;
-public class ContactListScreen extends BaseScreen {
+import java.util.List;
+
+public class ContactListScreen extends BaseScreen implements SwipeUtils {
 
 
     public ContactListScreen(AppiumDriver driver) {
@@ -22,6 +27,14 @@ public class ContactListScreen extends BaseScreen {
     WebElement appStop;
     @AndroidFindBy(xpath = "//android.widget.Toast[@text='Contact was added!']")
     WebElement messageContactWasAdded;
+    @AndroidFindBy(accessibility = "add")
+    WebElement btnPlus;
+    @AndroidFindBy(id = "android:id/button1")
+    WebElement btnYes;
+    @AndroidFindBy(xpath = "(//*[@resource-id='com.sheygam.contactapp:id/rowContainer'])")
+    List<WebElement> contactListScreen;
+    @AndroidFindBy(id = "com.sheygam.contactapp:id/emptyTxt")
+    WebElement noContacts;
 
 
     public boolean isBtnPlusPresent() {
@@ -60,5 +73,17 @@ public class ContactListScreen extends BaseScreen {
     }
     public boolean isTextInMessageContactWasAddedPresent(String text, int time){
         return isTextInElementPresent(messageContactWasAdded, text, time);
+    }
+    public void deleteContactMiddle(){
+        new WebDriverWait(driver, Duration.ofSeconds(2))
+                .until(ExpectedConditions.visibilityOf(btnPlus));
+        swipeScreen(driver, Direction.RIGHT);
+        btnYes.click();
+    }
+    public void deleteFirstContact(){
+        new WebDriverWait(driver, Duration.ofSeconds(2))
+                .until(ExpectedConditions.visibilityOf(btnPlus));
+        swipeInsideElement(driver, contactListScreen.get(0), Direction.RIGHT);
+        btnYes.click();
     }
 }

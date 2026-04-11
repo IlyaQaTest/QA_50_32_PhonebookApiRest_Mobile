@@ -25,8 +25,8 @@ public class AddNewContactTests extends TestBase {
     @BeforeMethod
     public void login() {
         loginRegistrationScreen = new LoginRegistrationScreen(driver);
-        User  user = new User(getProperty("base.properties","login"),
-                getProperty("base.properties","password"));
+        User  user = new User(getProperty("base.properties","login_1"),
+                getProperty("base.properties","password_1"));
         loginRegistrationScreen.typeLoginRegistrationForm(user);
         loginRegistrationScreen.clickBtnLogin();
         contactListScreen = new ContactListScreen(driver);
