@@ -54,17 +54,17 @@ public interface SwipeUtils {
 
     default void swipeInsideElement(AppiumDriver driver, WebElement element,
                                     Direction direction) {
-        Rectangle size = element.getRect();
+        Rectangle rect = element.getRect();
         int startX, endX;
-        int middleY = size.y + size.height / 2;
+        int middleY = rect.y + rect.height / 2;
         switch (direction) {
             case RIGHT -> {
-                startX = (int) (size.width * 0.2);
-                endX = (int) (size.width * 0.8);
+                startX = rect.x + (int) (rect.width * 0.2);
+                endX = rect.x + (int) (rect.width * 0.8);
             }
             case LEFT -> {
-                startX = (int) (size.width * 0.8);
-                endX = (int) (size.width * 0.2);
+                startX = rect.x + (int) (rect.width * 0.8);
+                endX   = rect.x + (int) (rect.width * 0.2);
             }
             default -> throw new IllegalArgumentException
                     ("Wrong direction --> " + direction);
@@ -77,6 +77,44 @@ public interface SwipeUtils {
                 .addAction(finger.createPointerDown(PointerInput.MouseButton.LEFT.asArg()))
                 .addAction(finger.createPointerMove(Duration.ofMillis(500), PointerInput.Origin.viewport(), endX, middleY))
                 .addAction(finger.createPointerUp(PointerInput.MouseButton.LEFT.asArg()));
+        driver.perform(Collections.singletonList(swipe));
+    }
+    default void swipeInsideElementUpdate(AppiumDriver driver, WebElement element) {
+
+        Rectangle rect = element.getRect();
+
+        int startX = rect.x + rect.width - 20;      // правый край
+        int endX   = rect.x + rect.width / 2;       // середина
+        int middleY = rect.y + rect.height / 2;
+
+        PointerInput finger = new PointerInput(PointerInput.Kind.TOUCH, "finger");
+        Sequence swipe = new Sequence(finger, 1)
+                .addAction(finger.createPointerMove(Duration.ZERO,
+                        PointerInput.Origin.viewport(), startX, middleY))
+                .addAction(finger.createPointerDown(PointerInput.MouseButton.LEFT.asArg()))
+                .addAction(finger.createPointerMove(Duration.ofMillis(500),
+                        PointerInput.Origin.viewport(), endX, middleY))
+                .addAction(finger.createPointerUp(PointerInput.MouseButton.LEFT.asArg()));
+
+        driver.perform(Collections.singletonList(swipe));
+    }
+    default void swipeInsideElementDelete(AppiumDriver driver, WebElement element) {
+
+        Rectangle rect = element.getRect();
+
+        int startX = rect.x + 20;                         // левый край
+        int endX   = rect.x + (rect.width / 2);           // середина элемента
+        int middleY = rect.y + rect.height / 2;
+
+        PointerInput finger = new PointerInput(PointerInput.Kind.TOUCH, "finger");
+        Sequence swipe = new Sequence(finger, 1)
+                .addAction(finger.createPointerMove(Duration.ZERO,
+                        PointerInput.Origin.viewport(), startX, middleY))
+                .addAction(finger.createPointerDown(PointerInput.MouseButton.LEFT.asArg()))
+                .addAction(finger.createPointerMove(Duration.ofMillis(500),
+                        PointerInput.Origin.viewport(), endX, middleY))
+                .addAction(finger.createPointerUp(PointerInput.MouseButton.LEFT.asArg()));
+
         driver.perform(Collections.singletonList(swipe));
     }
 }

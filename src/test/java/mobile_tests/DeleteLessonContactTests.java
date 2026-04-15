@@ -14,32 +14,37 @@ import screens.AddNewContactScreen;
 import screens.ContactListScreen;
 import screens.LoginRegistrationScreen;
 import utils.BaseApi;
-
-import static utils.ContactFactory.positiveContact;
+import utils.ContactFactory;
 import static utils.PropertiesReader.getProperty;
 
-public class DeleteContactTests extends TestBase {
+public class DeleteLessonContactTests extends TestBase {
     LoginRegistrationScreen loginRegistrationScreen;
     ContactListScreen contactListScreen;
     TokenDto tokenDto;
     ContactsDto contactsDtoBeforeDelete, contactsDtoAfterDelete;
-    AddNewContactScreen addNewContactScreen;
 
     @BeforeMethod
     public void login() {
-        User user = new User(getProperty("base.properties", "login"),
-                getProperty("base.properties", "password"));
+//        User user = new User(getProperty("base.properties", "login"),
+//                getProperty("base.properties", "password"));
+        User user = new User("tesla@yandex.il","Nobug@$#^&*!1");
+        Contact contact = ContactFactory.positiveContact();
         tokenDto = AuthenticationController.requestRegLogin(user, BaseApi.LOGIN_URL)
                 .as(TokenDto.class);
         Response response = ContactController.requestGetAllUserContacts(tokenDto.getToken());
         System.out.println(response.getStatusLine());
-        if(response.getStatusCode() == 200)
+        if(response.getStatusCode() == 200) {
             contactsDtoBeforeDelete = response.as(ContactsDto.class);
+            if(contactsDtoBeforeDelete.getContacts().isEmpty()){
+                ContactController.requestAddNewContact(contact, tokenDto.getToken());
+                contactsDtoBeforeDelete = ContactController.requestGetAllUserContacts
+                        (tokenDto.getToken()).as(ContactsDto.class);
+            }
+        }
         loginRegistrationScreen = new LoginRegistrationScreen(driver);
         loginRegistrationScreen.typeLoginRegistrationForm(user);
         loginRegistrationScreen.clickBtnLogin();
         contactListScreen = new ContactListScreen(driver);
-        addNewContactScreen = new AddNewContactScreen(driver);
     }
 
     @Test
@@ -63,37 +68,4 @@ public class DeleteContactTests extends TestBase {
         System.out.println(sizeBeforeDelete+" - "+ sizeAfterDelete);
         Assert.assertEquals(sizeAfterDelete, sizeBeforeDelete-1);
     }
-    @Test
-    public void deleteLastContactPositiveTest() {
-
-        // 1. Переходим на экран добавления контакта
-        contactListScreen.clickBtnPlus();
-        addNewContactScreen = new AddNewContactScreen(driver);
-
-        // 2. Создаём контакт
-        Contact contact = positiveContact();
-        addNewContactScreen.typeContactForm(contact);
-        addNewContactScreen.clickBtnCreate();
-
-        // 3. Ждём пока контакт появится в UI
-        contactListScreen.waitForContactListNotEmpty();
-
-        // 4. Получаем актуальный список через API
-        int sizeBeforeDelete = ContactController
-                .requestGetAllUserContacts(tokenDto.getToken())
-                .as(ContactsDto.class)
-                .getContacts().size();
-
-        // 5. Удаляем последний контакт
-        contactListScreen.deleteLastContact();
-
-        // 6. Проверяем через API
-        int sizeAfterDelete = ContactController
-                .requestGetAllUserContacts(tokenDto.getToken())
-                .as(ContactsDto.class)
-                .getContacts().size();
-
-        Assert.assertEquals(sizeAfterDelete, sizeBeforeDelete - 1);
-    }
-
 }

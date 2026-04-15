@@ -5,8 +5,8 @@ import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.pagefactory.AndroidFindBy;
 import org.openqa.selenium.WebElement;
 
-public class AddNewContactScreen extends BaseScreen{
-    public AddNewContactScreen(AppiumDriver driver) {
+public class EditContactScreen extends BaseScreen{
+    public EditContactScreen(AppiumDriver driver) {
         super(driver);
     }
 
@@ -23,10 +23,10 @@ public class AddNewContactScreen extends BaseScreen{
     @AndroidFindBy(id = "com.sheygam.contactapp:id/inputDesc")
     WebElement inputDescription;
 
-    @AndroidFindBy(id = "com.sheygam.contactapp:id/createBtn")
-    WebElement btnCreate;
+    @AndroidFindBy(id = "com.sheygam.contactapp:id/updateBtn")
+    WebElement btnUpdate;
 
-    public void typeContactForm(Contact contact) {
+    public void typeEditContactForm(Contact contact) {
         inputName.sendKeys(contact.getName());
         inputLastName.sendKeys(contact.getLastName());
         inputEmail.sendKeys(contact.getEmail());
@@ -35,7 +35,7 @@ public class AddNewContactScreen extends BaseScreen{
         inputDescription.sendKeys(contact.getDescription());
     }
 
-    public void clickBtnCreate(){
-        btnCreate.click();
+    public void clickBtnUpdate(){
+        btnUpdate.click();
     }
 }

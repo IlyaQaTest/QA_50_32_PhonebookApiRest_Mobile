@@ -9,51 +9,56 @@ import org.testng.annotations.Test;
 import screens.ContactListScreen;
 import screens.ErrorScreen;
 import screens.LoginRegistrationScreen;
-import screens.SplashScreen;
-
-import static utils.PropertiesReader.*;
+import static utils.PropertiesReader.getProperty;
 
 public class LoginTests extends TestBase {
-    private static final Logger logger = LoggerFactory.getLogger(RegistrationTests.class);
+    private static final Logger logger = LoggerFactory.getLogger(LoginTests.class);
     @BeforeMethod
     public void openAuthScreen() {
         loginRegistrationScreen = new LoginRegistrationScreen(driver);
     }
+
     @Test
-    public void loginPositiveBtnPlusTest(){
-        User user  =  new User(getProperty("base.properties",
+    public void loginLoggerPositiveTest() {
+        logger.info("---Start test---: loginPositiveTest");
+        User user = new User(
+                getProperty("base.properties", "login"),
+                getProperty("base.properties", "password")
+        );
+        loginRegistrationScreen.typeLoginRegistrationForm(user);
+        loginRegistrationScreen.clickBtnLogin();
+        logger.info("Step: Testing the transition to the contact list screen");
+        boolean isLoaded = new ContactListScreen(driver).isContactListDisplayed();
+        if (isLoaded) {
+            logger.info("RESULT: Authorization successful");
+        } else {
+            logger.error("RESULT: Contact list screen is NOT displayed!");
+        }
+        Assert.assertTrue(isLoaded, "Contact List screen should be displayed after login");
+        logger.info("--- END OF TEST ---");
+    }
+
+
+    @Test
+    public void loginPositiveBtnPlusTest() {
+        User user = new User(getProperty("base.properties",
                 "login"), getProperty("base.properties",
                 "password"));
         loginRegistrationScreen.typeLoginRegistrationForm(user);
         loginRegistrationScreen.clickBtnLogin();
-        Assert.assertTrue(new ContactListScreen(driver).isBtnPlusPresent());
+        ContactListScreen contactListScreen = new ContactListScreen(driver);
+        Assert.assertTrue(contactListScreen.isBtnPlusPresent(),
+                "Plus button should be visible after login");
     }
 
     @Test
-    public void loginPositiveTest(){
-        User user = new User(getProperty("base.properties","login"),
-                getProperty("base.properties","password"));
+    public void loginPositiveTest() {
+        User user = new User(getProperty("base.properties", "login"),
+                getProperty("base.properties", "password"));
         loginRegistrationScreen.typeLoginRegistrationForm(user);
         loginRegistrationScreen.clickBtnLogin();
         Assert.assertTrue(contactListScreen.isContactListDisplayed(),
                 "Error: Contact List screen did not display after login!");
-    }
-    @Test
-    public void loginSuccessTest() {
-        User user = new User(getProperty("base.properties","login"),
-                getProperty("base.properties","password"));
-        Assert.assertTrue(contactListScreen.isContactListDisplayed(),
-                "Ошибка: Экран Contact List не отобразился после логина!");
-
-        logger.info("Starting login test for user: {}", user.getUsername());
-
-        loginRegistrationScreen.typeLoginRegistrationForm(user);
-        loginRegistrationScreen.clickBtnLogin();
-        Assert.assertTrue(contactListScreen.isContactListDisplayed(),
-                "Ошибка: Экран Contact List не отобразился после логина!");
-
-        logger.info("Login successful, Contact List is displayed.");
-
     }
 
     @Test
@@ -112,4 +117,3 @@ public class LoginTests extends TestBase {
                 .validateTextInError("Login or Password incorrect", 5));
     }
 }
-

@@ -17,7 +17,7 @@ import dto.ContactsDto.*;
 import static utils.ContactFactory.positiveContact;
 import static utils.PropertiesReader.*;
 public class AddNewContactTests extends TestBase {
-    private static final Logger logger = LoggerFactory.getLogger(RegistrationTests.class);
+    private static final Logger logger = LoggerFactory.getLogger(AddNewContactTests.class);
     LoginRegistrationScreen loginRegistrationScreen;
     ContactListScreen contactListScreen;
     AddNewContactScreen addNewContactScreen;
@@ -116,4 +116,3 @@ public class AddNewContactTests extends TestBase {
                 ("must be a well-formed email address", 5));
     }
 }
-

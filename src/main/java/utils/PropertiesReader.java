@@ -1,22 +1,23 @@
 package utils;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.Properties;
 
 public class PropertiesReader {
     public static String getProperty(String fileName, String key) {
-        Properties properties = new Properties();
-        try (FileInputStream fileInputStream = new FileInputStream
-                        ("src/test/resources/properties" + File.separator + fileName)) {
-            properties.load(fileInputStream);
-           return properties.getProperty(key);
+        try {
+            Properties properties = new Properties();
+            ClassLoader loader = PropertiesReader.class.getClassLoader();
+            try (var inputStream = loader.getResourceAsStream("properties/" + fileName)) {
+                if (inputStream == null) {
+                    System.out.println("ERROR: Cannot find file in resources: properties/" + fileName);
+                    return null;
+                }
+                properties.load(inputStream);
+                return properties.getProperty(key);
+            }
         } catch (IOException e) {
-            System.out.println("created exception");
-            e.printStackTrace();
-            return null;
+            throw new RuntimeException("Failed to load properties file: " + fileName, e);
         }
     }
 }
-
