@@ -7,9 +7,13 @@ import lombok.*;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-
+@Builder(toBuilder = true)
+@EqualsAndHashCode
 public class ResponseMessageDto {
-   private String message;
-}
 
+   private String message;
+
+   public boolean isMessage(String expected) {
+      return expected != null && expected.equals(message);
+   }
+}

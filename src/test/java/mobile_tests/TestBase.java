@@ -34,7 +34,7 @@ public class TestBase {
         driver = AppiumConfig.createAppiumDriver("pixel.properties");
 
         logger.info("The driver has been created. Wait 5 seconds for it to stabilize SplashActivity...");
-        try { Thread.sleep(5000); } catch (InterruptedException e) {
+        try { Thread.sleep(2000); } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
         }
 
@@ -43,7 +43,7 @@ public class TestBase {
         contactListScreen = new ContactListScreen(driver);
     }
 
-    @AfterMethod(enabled = true) // Включаем, чтобы не копились «мертвые» сессии
+    @AfterMethod(enabled = false) // Включаем, чтобы не копились «мертвые» сессии
     public void tearDown() {
         if (driver != null) {
             logger.info("Ending the session and closing the driver.");

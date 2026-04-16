@@ -13,6 +13,6 @@ public class SplashScreen extends BaseScreen{
     WebElement versionApp;
 
     public boolean validateVersionApp(String text,int time){
-       return isTextInElementPresent(versionApp,text,time);
+        return isTextInElementPresent(versionApp,text,time);
     }
 }

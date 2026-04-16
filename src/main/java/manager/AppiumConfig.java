@@ -34,7 +34,7 @@ public class AppiumConfig {
         } catch (MalformedURLException e) {
             throw new RuntimeException("Bad Appium URL: " + appiumUrl, e);
         }
-        }
+    }
 
     private static String getRequired(String fileName, String key) {
         String value = getProperty(fileName, key);

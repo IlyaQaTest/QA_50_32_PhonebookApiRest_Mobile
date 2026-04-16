@@ -1,5 +1,14 @@
 plugins {
     id 'java'
+    // Плагин Allure для интеграции с Gradle
+    id "io.qameta.allure" version "2.11.2"
+}
+
+// Настройки Allure вынесены из блока plugins
+allure {
+    version = '2.24.0'
+    autoconfigure = true
+    aspectjweaver = true
 }
 
 group = 'org.example'
@@ -8,37 +17,45 @@ version = '1.0-SNAPSHOT'
 repositories {
     mavenCentral()
 }
+
+// Принудительное разрешение версии, если есть транзитивные конфликты
 configurations.all {
     resolutionStrategy.force 'commons-codec:commons-codec:1.15'
 }
 
 dependencies {
-    implementation 'commons-io:commons-io:2.11.0'
+    //Allure
+    testImplementation 'io.qameta.allure:allure-testng:2.24.0'
+    testImplementation 'io.qameta.allure:allure-java-commons:2.24.0'
 
+    // Selenium & TestNG
     implementation 'org.seleniumhq.selenium:selenium-java:4.25.0'
     implementation 'org.testng:testng:7.11.0'
 
-    // Lombok
+    // REST Assured & JSON
+    implementation 'io.rest-assured:rest-assured:5.4.0'
+    implementation 'com.google.code.gson:gson:2.10.1'
+
+    // Mobile (Appium)
+    implementation 'io.appium:java-client:9.2.2'
+
+    // Utils
+    implementation 'net.datafaker:datafaker:2.5.2'
+    implementation 'commons-io:commons-io:2.11.0'
+    implementation 'commons-codec:commons-codec:1.15'
+
+    // Lombok (сгруппировано для чистоты)
     compileOnly 'org.projectlombok:lombok:1.18.28'
     annotationProcessor 'org.projectlombok:lombok:1.18.28'
     testCompileOnly 'org.projectlombok:lombok:1.18.28'
     testAnnotationProcessor 'org.projectlombok:lombok:1.18.28'
 
-    // REST
-    implementation 'io.rest-assured:rest-assured:5.4.0'
-    implementation 'com.google.code.gson:gson:2.10.1'
-
-    // Mobile & Utils
-    implementation 'net.datafaker:datafaker:2.5.2'
-    implementation 'io.appium:java-client:9.2.2'
-
-    // Используем 1.15, так как она наиболее стабильна и доступна
-    implementation 'commons-codec:commons-codec:1.15'
-
+    // Logging
     testImplementation 'org.slf4j:slf4j-simple:2.0.7'
 }
 
 test {
     useTestNG()
+    // Необходимо для работы AspectJ/Allure с Java 17+
     jvmArgs = ['--add-opens', 'java.base/java.lang=ALL-UNNAMED']
 }

@@ -5,7 +5,7 @@ import net.datafaker.Faker;
 
 public class UserFactory {
     static Faker faker = new Faker();
-//    public static void main(String[] args) {
+    //    public static void main(String[] args) {
 //        Faker faker = new Faker();
 //        String name = faker.name().fullName();
 //        String firstName = faker.name().firstName();
